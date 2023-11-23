@@ -1,3 +1,4 @@
+/* Function to display BookList */
 function BookList({ Books }) {
   // passing props in curly brackets
   return (
