@@ -1,8 +1,8 @@
 function AddBookForm({ Book , onBookFormChange, onBookFormClick }) {
     return (
       <>
-        <input value={Book} onChange={onBookFormChange} />
-        <button onClick={onBookFormClick}>Add</button>
+        <input value={Book } placeholder="Enter title" onChange={onBookFormChange} />
+        <button onClick={onBookFormClick}>Add Book</button>
       </>
     );
   }
