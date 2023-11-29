@@ -1,40 +1,56 @@
 import "./App.css";
+import APIServices from "./ApiServices";
 import BookList from "./BookList";
 import AddBookForm from "./AddBookForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
+
+
+/***************** MAIN APP FUNCTION ******************************** */
 function App() {
-  const [Books, setBooks] = useState([
-    "The Richest Man in Babylon",
-    "Man's Search for Meaning",
-    "168 Hours",
-  ]);
-  const [newBook, setNewBook] = useState("");
 
-  // Handles updating our newBook as user types
-  function HandleAddBookFormChange(e) {
+  const [Books, setBooks] = useState([]);
+  const [newBook, setNewBook] = useState({
+    book: ''
+   });
+
+  // Sync loads all the books from the mockapi onto the local Books object
+  const syncBooks = () => {
+    APIServices.getBooksAPI().then(Books => setBooks(Books))
+  }
+  // Run once
+  useEffect(() => {
+    syncBooks();
+  }, [])
+
+  // Handles updating our newBook's book title as user types
+  const HandleAddBookFormChange=(e)=> {
     e.preventDefault();
+  
     const newValue = e.target.value;
-    console.log("NewValue in Change", newValue);
-    setNewBook(newValue);
+    setNewBook({
+      book:newValue
+    }); 
   }
 
-  // Handles updating our booklist when user clicks button
-  function HandleAddBookFormClick(e) {
-    e.preventDefault();
-
-    if (newBook !== "") {
-      const newBooks = [...Books, newBook];
-      setBooks(newBooks);
-      setNewBook("");
+  // Handles addition of the book when user clicks the Add button
+  const HandleAddBookFormClick = async(e) => {
+    if (newBook !== ""){
+        await APIServices.addBookAPI(newBook).then(() => {
+        syncBooks();
+        setNewBook({book: ''});
+      })
     }
   }
 
-  function HandleBookDeleteClick(id) {
-    const updatedBooks = Books.filter((book, index) => index !== id);
-    setBooks(updatedBooks);
+   // Handles deletion of book in our booklist when user clicks 'x' button
+   const HandleBookDeleteClick = async (id) => {
+    await APIServices.deleteBookAPI(id); // Await the deletion operation
+    syncBooks(); // Refresh books list after successful deletion
   }
+  
 
+  // Return value of the Main App function 
   return (
     <div className="App">
       <h1>Favorite Books</h1>
