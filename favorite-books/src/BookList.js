@@ -1,13 +1,13 @@
-/* Function to display BookList */
+/* Function to display list of all books */
 function BookList({ Books, onBookDeleteClick }) {
-  console.log("Books", Books);
   return (
     <>
       <ul style={{ listStyleType: 'none' }}>
-        {Books.map((Book, index) => (
-          <li key={index}>
-            {Book}
-            <button style={{ color: 'red' }} onClick={() => onBookDeleteClick(index)}>X</button>
+        {Books.map((Book) => (
+          console.log("BookList",Book),
+          <li key={Book.id}>
+            {Book.book}
+            <button style={{ color: 'red' }} onClick={() => onBookDeleteClick(Book.id)}>X</button>
           </li>
         ))}
       </ul>
